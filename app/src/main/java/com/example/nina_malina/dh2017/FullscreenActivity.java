@@ -29,6 +29,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -452,7 +453,35 @@ public class FullscreenActivity extends AppCompatActivity{
 
         @Override
         protected void onPostExecute(final String success) {
-            System.out.print("response " + success);
+
+
+            if(success != ""){
+
+                JSONObject jObject = null;
+                System.out.print("response " + success);
+                JSONArray users;
+                try {
+                    jObject = new JSONObject(success);
+                    users =  jObject.getJSONArray("users");
+
+                    if(users != null){
+                        for (int i = 0; i < users.length(); i++) {
+                            JSONObject user = users.getJSONObject(i);
+                            if (user.getString("_id").equals(id)) {
+
+                                target_id = user.getString("targetUserId");
+                                target_name = user.getString("targetUserName");
+                                break;
+                            }
+                        }
+
+                        ((TextView)findViewById(R.id.game_name)).setText("Hello, " + uname + "! \n Your target is " + target_name + ".\n Find and kill!");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
 
 
 //            if (success != "") {
