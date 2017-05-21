@@ -40,14 +40,14 @@ public class MyView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         // TODO Auto-generated method stub
-        System.out.println("IM HERE AAAA");
+//        System.out.println("IM HERE AAAA");
         super.onDraw(canvas);
         int width = getWidth();
         int height = getHeight();
 
 
-        System.out.println("w: " + width);
-        System.out.println("h: " + height);
+//        System.out.println("w: " + width);
+//        System.out.println("h: " + height);
 
         int radius;
         radius = 100;
@@ -95,8 +95,9 @@ public class MyView extends View {
                         double x = user.getDouble("x");
                         double y = user.getDouble("y");
                         boolean in_prox = isInProximity(my_x, my_y, x, y, width, height);
-                        System.out.println(in_prox);
+//                        System.out.println(in_prox);
                         if (in_prox) {
+
                             // My killer - Red color
                             if(user.getString("targetUserId").equals(my_id)){
                                 paint.setColor(Color.parseColor("#CD5C5C"));
@@ -106,6 +107,7 @@ public class MyView extends View {
                                 paint.setColor(Color.parseColor("#7AE534"));
                             }
                             //isDead = true;
+
                             canvas.drawCircle((float) (width/2 + x - my_x) , (float) (height/2 + y - my_y) , radius, paint);
                             paint.setColor(Color.parseColor("#4f23dc"));
                         }
@@ -122,10 +124,10 @@ public class MyView extends View {
     }
 
     private boolean isInProximity(double my_x, double my_y, double x, double y, int width, int height) {
-        System.out.println("my_x" + my_x);
-        System.out.println("my_y" + my_y);
-        System.out.println("x" + x);
-        System.out.println("y" + y);
+//        System.out.println("my_x" + my_x);
+//        System.out.println("my_y" + my_y);
+//        System.out.println("x" + x);
+//        System.out.println("y" + y);
         if (Math.abs(my_y - y) < height/2. && Math.abs(my_x - x) < width/2.){
             return true;
         }

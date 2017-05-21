@@ -19,6 +19,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.hardware.SensorEventListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,9 +52,11 @@ public class FullscreenActivity extends AppCompatActivity{
     String target_name;
     String target_id;
     private UpdateCoordinatesTask mTask = null;
+    private KillTask kTask = null;
     MyView board;
     SensorManager sensorManager;
     AccelerometerData ad;
+    Button killButton;
 
 
 
@@ -153,6 +156,21 @@ public class FullscreenActivity extends AppCompatActivity{
         target_id = intent.getStringExtra("target_id");
         mHandler = new Handler();
         board = (MyView) findViewById(R.id.myview);
+        killButton = (Button) findViewById(R.id.kill_button);
+        killButton.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                kTask = new KillTask();
+                try {
+                    kTask.execute(new URL("https://k1ller.herokuapp.com/kill"));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
         ((TextView)findViewById(R.id.game_name)).setText("Hello, " + uname + "! \n Your target is " + target_name + ".\n Find and kill!");
 
@@ -280,7 +298,7 @@ public class FullscreenActivity extends AppCompatActivity{
             StringEntity stringEntity = null;
             try {
                 String j = "{ \"_id\" : \"" + id + "\", \"ax\" : \"" + ax + "\", \"ay\" : \"" + ay + "\", \"az\" : \"" +az +"\" }";
-                System.out.println(j);
+//                System.out.println(j);
                 stringEntity = new StringEntity(j);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -339,6 +357,7 @@ public class FullscreenActivity extends AppCompatActivity{
 
 
                 try {
+
                     if(board.isDead){
                         Intent intent = new Intent(FullscreenActivity.this, EndScreenActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -355,17 +374,107 @@ public class FullscreenActivity extends AppCompatActivity{
                     }
                     else{
                         jObject = new JSONObject(success);
-                        System.out.print(jObject.toString());
                         board.invalidate();
                         board.users = jObject.getJSONArray("users");
                         board.my_id = id;
                     }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            //mAuthTask = null;
+            //showProgress(false);
+        }
+    }
+
+
+    public class KillTask extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected String doInBackground(URL... params) {
+
+            StringEntity stringEntity = null;
+            try {
+                String j = "{ \"_id\" : \"" + id + "\" }";
+                System.out.println(j);
+                stringEntity = new StringEntity(j);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = null;
+            try {
+                httppost = new HttpPost(new java.net.URI(params[0].toString()));
+                httppost.setHeader("Content-type", "application/json");
+                httppost.setEntity(stringEntity);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            InputStream inputStream = null;
+            String result = "";
+            try {
+                HttpResponse response = httpclient.execute(httppost);
+                HttpEntity entity = response.getEntity();
+                inputStream = entity.getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
+                StringBuilder sb = new StringBuilder();
+
+                String line = null;
+                while ((line = reader.readLine()) != null)
+                {
+                    sb.append(line + "\n");
+                }
+                result = sb.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            finally {
+                try{if(inputStream != null)inputStream.close();}catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+            return result;
+
+
+
+            // TODO: register the new account here.
+
+        }
+
+
+
+        @Override
+        protected void onPostExecute(final String success) {
+            System.out.print("response " + success);
+
+
+//            if (success != "") {
+//
+//                JSONObject jObject = null;
+//                double my_x = 0;
+//                float my_y = 0;
+//
+//
+//                try {
+//                    jObject = new JSONObject(success);
+//
+//                    System.out.print(jObject.toString());
+//                    board.invalidate();
+//                    board.users = jObject.getJSONArray("users");
+//                    board.my_id = id;
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
         }
 
         @Override
