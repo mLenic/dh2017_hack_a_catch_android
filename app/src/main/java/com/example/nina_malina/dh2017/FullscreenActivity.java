@@ -347,7 +347,11 @@ public class FullscreenActivity extends AppCompatActivity{
                         finish();
 
                     } else if(board.isWin) {
-                        
+                        Intent intent = new Intent(FullscreenActivity.this, WinScreenActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        stopRepeatingTask();
+                        finish();
                     }
                     else{
                         jObject = new JSONObject(success);
