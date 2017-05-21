@@ -19,6 +19,7 @@ public class MyView extends View {
 
     public String my_id = "";
     public JSONArray users;
+    boolean isDead = false;
 
     public MyView(Context context) {
         super(context);
@@ -96,8 +97,7 @@ public class MyView extends View {
                             if (user.getString("_id").equals(my_target)){
                                 paint.setColor(Color.parseColor("#7AE534"));
                             }
-                            System.out.println(x);
-                            System.out.println(y);
+                            //isDead = true;
                             canvas.drawCircle((float) (width/2 + x - my_x) , (float) (height/2 + y - my_y) , radius, paint);
                             paint.setColor(Color.parseColor("#4f23dc"));
                         }

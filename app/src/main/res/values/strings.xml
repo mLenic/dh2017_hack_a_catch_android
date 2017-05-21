@@ -17,5 +17,7 @@
 
     <string name="title_activity_fullscreen">CatchATarget</string>
     <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="dummy_content">You have been killed.</string>
+
+    <string name="title_activity_end_screen">Death Zone</string>
 </resources>
