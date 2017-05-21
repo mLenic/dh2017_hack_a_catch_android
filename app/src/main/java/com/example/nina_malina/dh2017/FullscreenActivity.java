@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +40,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 
-public class FullscreenActivity extends AppCompatActivity implements SensorEventListener{
+public class FullscreenActivity extends AppCompatActivity{
     double ax,ay,az;
     private int mInterval = 500; // 0.5 seconds
     private Handler mHandler;
@@ -50,6 +51,8 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
     String target;
     private UpdateCoordinatesTask mTask = null;
     MyView board;
+    SensorManager sensorManager;
+    AccelerometerData ad;
 
 
 
@@ -151,6 +154,10 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
 
         ((TextView)findViewById(R.id.game_name)).setText("Hello, " + uname + "! \n Your target is " + target + ". Find and kill!");
 
+        ad = new AccelerometerData();
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorManager.registerListener(ad,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_FASTEST);
+
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
@@ -173,8 +180,8 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
     @Override
     protected void onResume() {
         super.onResume();
-
-
+        sensorManager.registerListener(ad,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER
+        ),SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     private void toggle() {
@@ -220,19 +227,22 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
-            ax=event.values[0];
-            ay=event.values[1];
-            az=event.values[2];
+    private class AccelerometerData implements SensorEventListener {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+                ax=event.values[0];
+                ay=event.values[1];
+                az=event.values[2];
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
         }
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 
     void startRepeatingTask() {
         mStatusChecker.run();
@@ -246,9 +256,7 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
         @Override
         public void run() {
             try {
-                System.out.print("tuki");
-
-                mTask = new UpdateCoordinatesTask(uname, ((float) ax), ((float) ay), ((float)az));
+                mTask = new UpdateCoordinatesTask();
                 try {
                     mTask.execute(new URL("https://k1ller.herokuapp.com/update"));
                 } catch (MalformedURLException e) {
@@ -264,25 +272,14 @@ public class FullscreenActivity extends AppCompatActivity implements SensorEvent
 
     public class UpdateCoordinatesTask extends AsyncTask<URL, Void, String> {
 
-        private final String id = "";
-        private final float ax = 0;
-        private final float ay = 0;
-        private final float az = 0;
-
-        UpdateCoordinatesTask(String id, float ax, float ay, float az) {
-            id = id;
-            ax = ax;
-            ay = ay;
-            az = az;
-        }
-
         @Override
         protected String doInBackground(URL... params) {
 
             StringEntity stringEntity = null;
             try {
-                stringEntity = new StringEntity("{ \"id\" : \"" + id + "\", \"ax\" : \"" +
-                                            ax + "\", \"ay\" : \"" + ay + "\", \"az\"" +az +"\" }");
+                String j = "{ \"_id\" : \"" + id + "\", \"ax\" : \"" + ax + "\", \"ay\" : \"" + ay + "\", \"az\" : \"" +az +"\" }";
+                System.out.println(j);
+                stringEntity = new StringEntity(j);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

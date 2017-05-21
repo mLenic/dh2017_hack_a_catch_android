@@ -281,7 +281,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 // Simulate network access.
                 StringEntity stringEntity = null;
                 try {
-                    stringEntity = new StringEntity("{ \"username\" : \"" + mEmail + "\" }");
+                    stringEntity = new StringEntity("{ \"name\" : \"" + mEmail + "\" }");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
