@@ -309,7 +309,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     {
                         sb.append(line + "\n");
                     }
-                    System.out.print("lkjfkldsj");
                     System.out.print(sb.toString());
                     result = sb.toString();
                 } catch (Exception e) {
@@ -342,6 +341,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     float x = 0;
                     float y = 0;
                     String id = "";
+                    String target_name = "";
+                    String target_id = "";
+
                     try {
                         jObject = new JSONObject(success);
 
@@ -351,6 +353,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         x = jUser.getInt("x");
                         y = jUser.getInt("y");
                         id = jUser.getString("_id");
+                        target_name = jUser.getString("targetUserName");
+                        target_id = jUser.getString("targetUserId");
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -361,6 +365,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     intent.putExtra("my_x", x);
                     intent.putExtra("my_y", y);
                     intent.putExtra("uname", mEmail);
+                    intent.putExtra("target_name", target_name);
+                    intent.putExtra("target_id", target_id);
                     startActivity(intent);
 
                 finish();

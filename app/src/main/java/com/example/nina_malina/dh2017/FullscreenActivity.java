@@ -48,7 +48,8 @@ public class FullscreenActivity extends AppCompatActivity{
     float my_y;
     String id;
     String uname;
-    String target;
+    String target_name;
+    String target_id;
     private UpdateCoordinatesTask mTask = null;
     MyView board;
     SensorManager sensorManager;
@@ -148,11 +149,12 @@ public class FullscreenActivity extends AppCompatActivity{
         id = intent.getStringExtra("id");
         my_x = intent.getFloatExtra("my_x", 0);
         my_y = intent.getFloatExtra("my_y", 0);
-        target = "matevzek";
+        target_name = intent.getStringExtra("target_name");
+        target_id = intent.getStringExtra("target_id");
         mHandler = new Handler();
         board = (MyView) findViewById(R.id.myview);
 
-        ((TextView)findViewById(R.id.game_name)).setText("Hello, " + uname + "! \n Your target is " + target + ". Find and kill!");
+        ((TextView)findViewById(R.id.game_name)).setText("Hello, " + uname + "! \n Your target is " + target_name + ".\n Find and kill!");
 
         ad = new AccelerometerData();
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
