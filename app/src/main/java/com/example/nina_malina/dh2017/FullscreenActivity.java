@@ -44,7 +44,7 @@ import java.net.URL;
 
 public class FullscreenActivity extends AppCompatActivity{
     double ax,ay,az;
-    private int mInterval = 500; // 0.5 seconds
+    private int mInterval = 100; // 0.1 seconds
     private Handler mHandler;
     float my_x;
     float my_y;

@@ -66,6 +66,10 @@ public class MyView extends View {
         double my_x = 0.0;
         double my_y = 0.0;
         String my_target = "";
+
+        double my_target_x = 0;
+        double my_target_y = 0;
+
         if (users != null) {
             isDead = true;
             //Only one left - You win
@@ -96,7 +100,7 @@ public class MyView extends View {
                         double y = user.getDouble("y");
                         boolean in_prox = isInProximity(my_x, my_y, x, y, width, height);
 //                        System.out.println(in_prox);
-                        if (in_prox) {
+
 
                             // My killer - Red color
                             if(user.getString("targetUserId").equals(my_id)){
@@ -105,9 +109,11 @@ public class MyView extends View {
                             // My target - Green color
                             if (user.getString("_id").equals(my_target)){
                                 paint.setColor(Color.parseColor("#7AE534"));
+                                my_target_x = user.getDouble("x");
+                                my_target_y = user.getDouble("y");
                             }
                             //isDead = true;
-
+                        if (in_prox) {
                             canvas.drawCircle((float) (width/2 + x - my_x) , (float) (height/2 + y - my_y) , radius, paint);
                             paint.setColor(Color.parseColor("#707070"));
                             paint.setTextSize(50);
@@ -121,6 +127,21 @@ public class MyView extends View {
                     e.printStackTrace();
                 }
             }
+            //Get Angle between yourself and your target
+            double dx = my_target_x - my_x;
+            double dy = my_target_y - my_y;
+
+            double length = Math.sqrt(dx*dx + dy*dy);
+            dx/= length;
+            dy/= length;
+
+            //Draw direction
+            float xEnd = (float) (width/2 + dx * 150);
+            float yEnd = (float) (height/2 + dy * 150);
+            paint.setColor(Color.parseColor("#7AE534"));
+            paint.setStrokeWidth(10);
+            canvas.drawLine(width / 2, height / 2, xEnd, yEnd, paint);
+            paint.setColor(Color.parseColor("#4f23dc"));
         }
 
 //        canvas.drawText(testInt,0,0,paint);
