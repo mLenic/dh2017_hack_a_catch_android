@@ -16,8 +16,10 @@
     </string>
 
     <string name="title_activity_fullscreen">CatchATarget</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">You have been killed.</string>
+    <string name="death_content">You have been killed.</string>
 
     <string name="title_activity_end_screen">Death Zone</string>
+
+    <string name="title_activity_win_screen">Podium</string>
+    <string name="winning_content">You have won.\nCONGRATULATIONS!</string>
 </resources>

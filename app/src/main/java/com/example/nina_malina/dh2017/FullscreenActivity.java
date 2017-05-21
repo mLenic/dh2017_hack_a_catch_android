@@ -346,7 +346,10 @@ public class FullscreenActivity extends AppCompatActivity{
                         stopRepeatingTask();
                         finish();
 
-                    } else{
+                    } else if(board.isWin) {
+                        
+                    }
+                    else{
                         jObject = new JSONObject(success);
                         System.out.print(jObject.toString());
                         board.invalidate();

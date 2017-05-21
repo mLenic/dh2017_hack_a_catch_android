@@ -19,7 +19,8 @@ public class MyView extends View {
 
     public String my_id = "";
     public JSONArray users;
-    boolean isDead = false;
+    boolean isDead  = false;
+    boolean isWin   = false;
 
     public MyView(Context context) {
         super(context);
@@ -66,13 +67,20 @@ public class MyView extends View {
         double my_y = 0.0;
         String my_target = "";
         if (users != null) {
+            isDead = true;
+            //Only one left - You win
+
             for (int i = 0; i < users.length(); i++) {
                 try {
                     JSONObject user = users.getJSONObject(i);
                     if (user.getString("_id").equals(my_id)) {
+                        if(users.length() == 1){
+                            isWin = true;
+                        }
                         my_x = user.getDouble("x");
                         my_y = user.getDouble("y");
                         my_target = user.getString("targetUserId");
+                        isDead = false;
                     }
 
                 } catch (JSONException e) {
