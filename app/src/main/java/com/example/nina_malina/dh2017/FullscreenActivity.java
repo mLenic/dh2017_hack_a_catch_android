@@ -330,42 +330,27 @@ public class FullscreenActivity extends AppCompatActivity{
         @Override
         protected void onPostExecute(final String success) {
 
-            board.invalidate();
-            /*
-            mAuthTask = null;
-            showProgress(false);
 
             if (success != "") {
 
-
                 JSONObject jObject = null;
-                float x = 0;
-                float y = 0;
-                String id = "";
+                double my_x = 0;
+                float my_y = 0;
+
+
                 try {
                     jObject = new JSONObject(success);
 
                     System.out.print(jObject.toString());
-                    x = jObject.getInt("x");
-                    y = jObject.getInt("y");
-                    id = jObject.getString("id");
+                    board.invalidate();
+                    board.users = jObject.getJSONArray("users");
+                    board.my_id = id;
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                Intent intent = new Intent(LoginActivity.this, FullscreenActivity.class);
-                intent.putExtra("id", id);
-                intent.putExtra("my_x", x);
-                intent.putExtra("my_y", y);
-                intent.putExtra("uname", mEmail);
-                startActivity(intent);
-
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }*/
+            }
         }
 
         @Override
