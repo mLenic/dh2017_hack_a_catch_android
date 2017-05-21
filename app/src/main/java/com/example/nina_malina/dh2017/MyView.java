@@ -109,6 +109,9 @@ public class MyView extends View {
                             //isDead = true;
 
                             canvas.drawCircle((float) (width/2 + x - my_x) , (float) (height/2 + y - my_y) , radius, paint);
+                            paint.setColor(Color.parseColor("#707070"));
+                            paint.setTextSize(50);
+                            canvas.drawText(user.getString("name"), (float) (width/2 + x - my_x + 10) , (float) (height/2 + y - my_y - 20),paint);
                             paint.setColor(Color.parseColor("#4f23dc"));
                         }
 
