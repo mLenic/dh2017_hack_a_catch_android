@@ -19,6 +19,7 @@ public class MyView extends View {
 
     public String my_id = "";
     public JSONArray users;
+    boolean isDead = false;
 
     public MyView(Context context) {
         super(context);
@@ -54,7 +55,7 @@ public class MyView extends View {
         paint.setColor(Color.WHITE);
         canvas.drawPaint(paint);
         // Use Color.parseColor to define HTML colors
-        paint.setColor(Color.parseColor("#CD5C5C"));
+        paint.setColor(Color.parseColor("#000000"));
         canvas.drawCircle(width / 2, height / 2, radius, paint);
 
         paint.setColor(Color.parseColor("#4f23dc"));
@@ -63,7 +64,7 @@ public class MyView extends View {
 
         double my_x = 0.0;
         double my_y = 0.0;
-
+        String my_target = "";
         if (users != null) {
             for (int i = 0; i < users.length(); i++) {
                 try {
@@ -71,6 +72,7 @@ public class MyView extends View {
                     if (user.getString("_id").equals(my_id)) {
                         my_x = user.getDouble("x");
                         my_y = user.getDouble("y");
+                        my_target = user.getString("targetUserId");
                     }
 
                 } catch (JSONException e) {
@@ -88,9 +90,18 @@ public class MyView extends View {
 //                        System.out.println(in_prox);
                         if (in_prox) {
 
-//                            System.out.println(x);
-//                            System.out.println(y);
+                            // My killer - Red color
+                            if(user.getString("targetUserId").equals(my_id)){
+                                paint.setColor(Color.parseColor("#CD5C5C"));
+                            }
+                            // My target - Green color
+                            if (user.getString("_id").equals(my_target)){
+                                paint.setColor(Color.parseColor("#7AE534"));
+                            }
+                            //isDead = true;
+
                             canvas.drawCircle((float) (width/2 + x - my_x) , (float) (height/2 + y - my_y) , radius, paint);
+                            paint.setColor(Color.parseColor("#4f23dc"));
                         }
 
                     }

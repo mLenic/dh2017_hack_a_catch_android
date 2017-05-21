@@ -357,12 +357,21 @@ public class FullscreenActivity extends AppCompatActivity{
 
 
                 try {
-                    jObject = new JSONObject(success);
 
-//                    System.out.print(jObject.toString());
-                    board.invalidate();
-                    board.users = jObject.getJSONArray("users");
-                    board.my_id = id;
+                    if(board.isDead){
+                        Intent intent = new Intent(FullscreenActivity.this, EndScreenActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        stopRepeatingTask();
+                        finish();
+
+                    } else{
+                        jObject = new JSONObject(success);
+                        board.invalidate();
+                        board.users = jObject.getJSONArray("users");
+                        board.my_id = id;
+                    }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
